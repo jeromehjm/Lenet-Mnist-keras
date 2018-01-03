@@ -1,0 +1,51 @@
++#基于卷积神经网络的手写数字识别系统构建
+# import the modules we need  
+from keras import backend as K  
+from keras.models import Sequential  
+from keras.layers.convolutional import Conv2D  
+from keras.layers.convolutional import MaxPooling2D  
+from keras.layers.core import Activation  
+from keras.layers.core import Flatten  
+from keras.layers.core import Dense  
+from keras.datasets import mnist  
+from keras.utils import np_utils  
+from keras.optimizers import SGD,RMSprop,Adam  
+import numpy as np  
+import matplotlib.pyplot as plt  
+  
+#定义卷积神经网络模型  
+class LeNet:  
+ 
+    @staticmethod  
+    def createLeNet(input_shape,nb_class):  
+      
+        feature_layers = [  
+        Conv2D(20,kernel_size=5,padding="same",input_shape=input_shape),  
+        Activation("relu"),  
+        MaxPooling2D(pool_size=(2,2),strides=(2,2)),  
+        Conv2D(50,kernel_size=5,border_mode="same"),  
+        Activation("relu"),  
+        MaxPooling2D(pool_size=(2,2),strides=(2,2)),  
+        Flatten()  
+        ]  
+          
+        classification_layers=[  
+        Dense(500),  
+        Activation("relu"),  
+        Dense(nb_class),  
+        Activation("softmax")  
+        ]  
+          
+        model = Sequential(feature_layers+classification_layers)  
+        return model  
+  
+#参数设置
+NB_EPOCH = 20  
+BATCH_SIZE = 128  
+VERBOSE = 1  
+OPTIMIZER = Adam()  
+VALIDATION_SPLIT = 0.2  
+IMG_ROWS,IMG_COLS = 28,28  
+NB_CLASSES = 10  
+INPUT_SHAPE =(1,IMG_ROWS,IMG_COLS)  
+  
